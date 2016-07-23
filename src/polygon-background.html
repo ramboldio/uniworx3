@@ -1,0 +1,77 @@
+
+<script src="../bower_components/threejs/index.js"></script>
+<script src="../bower_components/simplexNoise/index.js"></script>
+
+
+<script>
+  Polymer({
+    is : "polygon-background",
+
+    ready: function () {
+
+            var subdevides = 30;
+
+            // create new scene
+            var scene = new THREE.Scene();
+            // set camera details
+            var camera = new THREE.PerspectiveCamera(45,window.innerWidth / window.innerHeight,1,1000);
+            // var camera = new THREE.OrthographicCamera( window.innerWidth / - 2, window.innerWidth / 2, window.innerHeight / 2, window.innerHeight / - 2, 1, 1000 );
+            // camera position
+            camera.position.x = 0;
+            camera.position.y = 0;
+            camera.position.z = 12;
+            // camera orientation
+            camera.lookAt(new THREE.Vector3(0,0,0));
+
+            // define renderer and set size to window dimensions
+            var renderer = new THREE.WebGLRenderer();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+
+            renderer.setClearColor(0xffffff, 1);
+
+             // add renderer canvas to HTML content
+            document.body.appendChild(renderer.domElement);
+
+
+            var planeGeo = new THREE.PlaneGeometry( 15, 15, subdevides , subdevides );
+            var material = new THREE.MeshBasicMaterial( { color: 0xffffff, side: THREE.DoubleSide, visible : true } );
+            // var material = new THREE.ShaderMaterial( uniforms, attributes, defines, vertexShader );
+            var plane = new THREE.Mesh( planeGeo, material );
+
+            // planeGeo.rotateX(0.2);
+
+
+            var noise = new SimplexNoise();
+
+            for(var i = 0;  i < planeGeo.vertices.length;i++){
+              var noiseValue =  noise.noise3d(planeGeo.vertices[i].x,planeGeo.vertices[i].y,0);
+              planeGeo.vertices[i].z =  noiseValue/2;
+            }
+
+            wireframe = new THREE.WireframeHelper( plane, 0x37cd57 );
+
+
+            var light = new THREE.DirectionalLight( 0xffffff, 1 );
+            light.position.set( 0, 1, 1 );
+            light.castShadow = true;
+            // THREE.DirectionalLightHelper(light, 20);
+
+
+
+            scene.add( light );
+
+            scene.add( light );
+            scene.add( plane );
+            scene.add( wireframe );
+
+
+            function render() {
+                requestAnimationFrame( render );
+                renderer.render( scene, camera );
+                // plane.rotateX(0.02);
+            }
+            render();
+
+    }
+  });
+</script>
