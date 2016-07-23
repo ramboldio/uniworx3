@@ -1,0 +1,137 @@
+
+
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/iron-localstorage/iron-localstorage.html">
+<link rel="import" href="login-background.html">
+<link rel="import" href="uniworx-logo.html">
+
+
+<dom-module id="login-screen">
+
+  <template>
+
+
+  <style>
+    :host {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      @apply(--global-font);
+    }
+    uniworx-logo {
+      display: block;
+      width: 100%;
+      text-align: center;
+    }
+    .login-box {
+      width: 20em;
+      background: #fff;
+      border-radius: 5px;
+      padding: 0.5em;
+    }
+    form > * {
+      display: block;
+      width: 100%;
+      text-align: center;
+    }
+    form > label {
+      margin-top: 0.5em;
+      color: #444;
+    }
+
+    form button {
+      flex: 1;
+    }
+    input[type="text"], input[type="password"], button {
+      border: none;
+      height: 2em;
+    }
+    input, button {
+      @apply(--global-font);
+      border-color: var(--app-color-1);
+    }
+    ::-webkit-input-placeholder, :-moz-placeholder, ::-moz-placeholder, :-ms-input-placeholder {
+      @apply(--global-font);
+    }
+    h2  {
+      @apply(--heading-style);
+      color: var(--app-color-1);
+      margin-top: 0;
+      text-align: center;
+        text-shadow:
+         -1px -1px 0 #fff,
+          1px -1px 0 #fff,
+          -1px 1px 0 #fff,
+           1px 1px 0 #fff;
+    }
+    .button-wrapper {
+      margin-top: 0.5em;
+      display: -webkit-box;
+      display: -moz-box;
+      display: -ms-flexbox;
+      display: -webkit-flex;
+      display: flex;
+    }
+    .button-wrapper > button:nth-child(2){
+      margin-left: 20px;
+    }
+  </style>
+
+  <polygon-background></polygon-background>
+
+    <div class="login-container">
+        <uniworx-logo></uniworx-logo>
+        <h2 class="jack" >uniworx</h2>
+      <form class="login-box">
+        <input type="text" value$="{{user.name::change}}" placeholder="Campus-Kennung">
+        <input on-input="pw_change" type="password" value$="{{user.password::change}}" placeholder="Passwort">
+        <div class="button-wrapper">
+          <button on-tap="save_submit_login">Save for later & Login</button>
+          <button on-tap="submit_login">Login</button>
+        </div>
+    </form>
+    </div>
+
+
+  </template>
+
+
+  <script>
+
+    Polymer({
+
+      is: 'login-screen',
+
+      factoryImpl: function () {
+        console.log('test');
+      },
+
+      properties: {
+        user : {
+          type: Object,
+          value: {
+            name: "",
+            password: ""
+          }
+        },
+        save_user: Boolean
+      },
+
+      save_submit_login: function (e) {
+        e.preventDefault();
+        // TODO
+      },
+
+      submit_login: function (e) {
+        e.preventDefault();
+        // TODO
+      }
+
+    });
+
+  </script>
+
+</dom-module>
