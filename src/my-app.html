@@ -13,6 +13,7 @@
 <link rel="import" href="../bower_components/iron-selector/iron-selector.html">
 <link rel="import" href="my-icons.html">
 <link rel="import" href="login-screen.html">
+<link rel="import" href="course-card.html">
 
 
 <dom-module id="my-app">
@@ -46,7 +47,10 @@
               text-transform: uppercase;
               letter-spacing: initial;
               font-size: 2em;
+        };
 
+        --round-box: {
+          border-radius: 5px;
         };
         --global-font : {
             font-family: 'Source Sans Pro', sans-serif;
@@ -94,37 +98,30 @@
         data="{{routeData}}"
         tail="{{subroute}}"></app-route>
 
-    <!--app-drawer-layout fullbleed>
+    <app-drawer-layout fullbleed>
 
       <app-drawer>
         <app-toolbar>Menu</app-toolbar>
         <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
           <a name="view1" href="/view1">View One</a>
-          <a name="view2" href="/view2">View Two</a>
+          <a name="view2" href="/view2">Login</a>
           <a name="view3" href="/view3">View Three</a>
         </iron-selector>
       </app-drawer>
 
       <app-header-layout has-scrolling-region>
 
-        <app-header condenses reveals effects="waterfall">
-          <app-toolbar>
-            <paper-icon-button icon="menu" drawer-toggle></paper-icon-button>
-            <div title>My App</div>
-          </app-toolbar>
-        </app-header>
+
 
         <iron-pages role="main" selected="[[page]]" attr-for-selected="name">
           <my-view1 name="view1"></my-view1>
-          <my-view2 name="view2"></my-view2>
+          <login-screen name="view2"></login-screen>
           <my-view3 name="view3"></my-view3>
         </iron-pages>
 
       </app-header-layout>
 
-    </app-drawer-layout-->
-
-    <login-screen></login-screen>
+    </app-drawer-layout>
 
   </template>
 

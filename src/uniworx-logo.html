@@ -8,11 +8,18 @@
       svg, :host {
         width: 3em;
       }
+      svg.bounding-box {
+        padding: 0.5em;
+        padding-bottom: 0;
+        /* box-shadow: 0 0 40px gray; */
+        border-radius: 5px;
+        background-color: #fff;
+      }
     </style>
 
 
-    <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg
+  class$="[[svg_class]]"
    xmlns:dc="http://purl.org/dc/elements/1.1/"
    xmlns:cc="http://creativecommons.org/ns#"
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
@@ -36,6 +43,25 @@
 </dom-module>
 <script>
   Polymer({
-    is: 'uniworx-logo'
+    is: 'uniworx-logo',
+
+    properties: {
+      bounding_box : {
+        type: Boolean,
+        value: true,
+        reflectToAttribute: true
+      },
+      svg_class : {
+        type: String,
+        computed: 'getSvgContainerClass(bounding_box)'
+      }
+    },
+
+    getSvgContainerClass: function (bounding_box) {
+      if(bounding_box)
+          return "bounding-box";
+      else
+        return "";
+    }
   });
 </script>

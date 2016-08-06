@@ -7,71 +7,110 @@
   Polymer({
     is : "polygon-background",
 
-    ready: function () {
+    created: function () {
+
 
             var subdevides = 30;
 
             // create new scene
             var scene = new THREE.Scene();
             // set camera details
-            var camera = new THREE.PerspectiveCamera(45,window.innerWidth / window.innerHeight,1,1000);
-            // var camera = new THREE.OrthographicCamera( window.innerWidth / - 2, window.innerWidth / 2, window.innerHeight / 2, window.innerHeight / - 2, 1, 1000 );
+            // var camera = new THREE.PerspectiveCamera(45,window.innerWidth / window.innerHeight,1,1000);
+            var camera = new THREE.OrthographicCamera( window.innerWidth / - 2, window.innerWidth / 2, window.innerHeight / 2, window.innerHeight / - 2, 1, 100 );
             // camera position
             camera.position.x = 0;
             camera.position.y = 0;
-            camera.position.z = 12;
+            camera.position.z = 10;
+
+            camera.zoom = 80;
+            camera.updateProjectionMatrix();
+
             // camera orientation
             camera.lookAt(new THREE.Vector3(0,0,0));
 
             // define renderer and set size to window dimensions
             var renderer = new THREE.WebGLRenderer();
             renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setClearColor(0xffffff);
 
-            renderer.setClearColor(0xffffff, 1);
 
              // add renderer canvas to HTML content
             document.body.appendChild(renderer.domElement);
 
 
-            var planeGeo = new THREE.PlaneGeometry( 15, 15, subdevides , subdevides );
-            var material = new THREE.MeshBasicMaterial( { color: 0xffffff, side: THREE.DoubleSide, visible : true } );
-            // var material = new THREE.ShaderMaterial( uniforms, attributes, defines, vertexShader );
-            var plane = new THREE.Mesh( planeGeo, material );
-
-            // planeGeo.rotateX(0.2);
+            var planeGeo = new THREE.PlaneGeometry( 25, 25, subdevides , subdevides );
 
 
             var noise = new SimplexNoise();
 
             for(var i = 0;  i < planeGeo.vertices.length;i++){
               var noiseValue =  noise.noise3d(planeGeo.vertices[i].x,planeGeo.vertices[i].y,0);
-              planeGeo.vertices[i].z =  noiseValue/2;
+              planeGeo.vertices[i].z =  noiseValue *  0.5;
             }
 
-            wireframe = new THREE.WireframeHelper( plane, 0x37cd57 );
+            var material = new THREE.MeshPhongMaterial( { color: 0xeeeeee, visible : true , shading: THREE.FlatShading} );
+            // var material = new THREE.ShaderMaterial( uniforms, attributes, defines, vertexShader );
+            var plane = new THREE.Mesh( planeGeo, material );
+
+            planeGeo.rotateZ(0.2);
 
 
-            var light = new THREE.DirectionalLight( 0xffffff, 1 );
-            light.position.set( 0, 1, 1 );
+            var light, light2, ambilight;
+            var mood = "noon";
+            switch(mood) {
+              case "noon":
+                light = new THREE.DirectionalLight( 0x37cd57, 1 );
+                light2 = new THREE.DirectionalLight( 0xffffff, 0.8 )
+                ambilight = new THREE.AmbientLight( 0x333333 );
+                break;
+              case "midnight":
+                light = new THREE.DirectionalLight( 0x37cd57, 0.3 );
+                light2 = new THREE.DirectionalLight( 0xffffff, 0.4 )
+                ambilight = new THREE.AmbientLight( 0x333333 );
+                break;
+              case "afternoonn":
+                light = new THREE.DirectionalLight( 0x37cd57, 1 );
+                light2 = new THREE.DirectionalLight( 0xffdca0, 0.8 )
+                ambilight = new THREE.AmbientLight( 0x333333 );
+                break;
+              case "sunset":
+                light = new THREE.DirectionalLight( 0x37cd57, 0.5 );
+                light2 = new THREE.DirectionalLight( 0xffa23f, 0.8 )
+                ambilight = new THREE.AmbientLight( 0x333333 );
+                break;
+              case "noon_rain":
+                light = new THREE.DirectionalLight( 0x37cd57, 0.5 );
+                light2 = new THREE.DirectionalLight( 0xffffff, 0.7 )
+                ambilight = new THREE.AmbientLight( 0x333333 );
+                break;
+            }
+
+
+            light.position.set( 50, 50, 100 );
+            light.lookAt(0,0,0);
             light.castShadow = true;
-            // THREE.DirectionalLightHelper(light, 20);
 
+            light2.position.set( -50, -50, 80 );
+            light2.lookAt(new THREE.Vector3(0,0,0));
+            light2.castShadow = true;
 
+            var point_lamp = new THREE.PointLight( 0xffffff, 2, 7 );
+            point_lamp.position = new THREE.Vector3( 0, 0, 2);
 
-            scene.add( light );
-
+            scene.add( light2 );
+            scene.add( ambilight );
+            // scene.add(point_lamp);
             scene.add( light );
             scene.add( plane );
-            scene.add( wireframe );
 
 
             function render() {
                 requestAnimationFrame( render );
                 renderer.render( scene, camera );
-                // plane.rotateX(0.02);
+                plane.rotateZ(0.01);
+                camera.rotateZ(0.01);
             }
             render();
-
     }
   });
 </script>

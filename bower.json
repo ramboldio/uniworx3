@@ -16,9 +16,9 @@
     "iron-selector": "polymerelements/iron-selector#^1.0.0",
     "paper-icon-button": "PolymerElements/paper-icon-button#~1.1.1",
     "polymer": "polymer/polymer#^1.4.0",
-
     "threejs": "https://raw.githubusercontent.com/mrdoob/three.js/master/build/three.min.js",
-    "simplexNoise" : "https://gist.githubusercontent.com/banksean/304522/raw/8f481c980fe34e6930d44c61c59d7851f4235a3c/perlin-noise-simplex.js"
+    "simplexNoise": "https://gist.githubusercontent.com/banksean/304522/raw/8f481c980fe34e6930d44c61c59d7851f4235a3c/perlin-noise-simplex.js",
+    "iron-ajax": "^1.4.3"
   },
   "devDependencies": {
     "web-component-tester": "^4.0.0"

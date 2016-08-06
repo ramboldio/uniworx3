@@ -1,13 +1,14 @@
 
 
 <link rel="import" href="../bower_components/iron-localstorage/iron-localstorage.html" >
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html" >
 <link rel="import" href="polygon-background.html" async>
 <link rel="import" href="uniworx-logo.html" >
 
 
 <dom-module id="login-screen">
 
-  <template>
+  <template id="t">
 
 
   <style>
@@ -19,17 +20,29 @@
       align-items: center;
       justify-content: center;
       @apply(--global-font);
+
     }
     uniworx-logo {
       display: block;
       width: 100%;
       text-align: center;
+      overflow: visible;
+      height: 0;
+      position: relative;
+      top: -100px;
+      padding: 0.3em;
+      border-radius: 5px;
+    }
+    .login-container {
+      padding: 1em;
+      /* box-shadow: 5px 10px 40px #aaa; */
+      border-radius: 5px;
+      background-color: #fff;
     }
     .login-box {
       width: 20em;
       background: #fff;
       border-radius: 5px;
-      padding: 0.5em;
     }
     form > * {
       display: block;
@@ -59,23 +72,24 @@
       @apply(--heading-style);
       color: var(--app-color-1);
       margin-top: 0;
+      margin-bottom: 0;
       text-align: center;
-        text-shadow:
-         -1px -1px 0 #fff,
-          1px -1px 0 #fff,
-          -1px 1px 0 #fff,
-           1px 1px 0 #fff;
     }
     .button-wrapper {
-      margin-top: 0.5em;
+      margin-top: 1em;
       display: -webkit-box;
       display: -moz-box;
       display: -ms-flexbox;
       display: -webkit-flex;
       display: flex;
     }
-    .button-wrapper > button:nth-child(2){
-      margin-left: 20px;
+    .button-wrapper > button:first-child{
+      margin-right: 20px;
+      background: #fff;
+      border: 1px solid gray;
+    }
+    button:hover {
+      cursor: pointer;
     }
   </style>
 
@@ -85,14 +99,27 @@
         <uniworx-logo></uniworx-logo>
         <h2 class="jack" >uniworx</h2>
       <form class="login-box">
-        <input type="text" value$="{{user.name::change}}" placeholder="Campus-Kennung">
-        <input on-input="pw_change" type="password" value$="{{user.password::change}}" placeholder="Passwort">
+        <input type="text" value="{{user_name::input}}" placeholder="Campus-Kennung">
+        <input type="password" value="{{user_pw::input}}" placeholder="Passwort">
         <div class="button-wrapper">
           <button on-tap="save_submit_login">Save for later & Login</button>
           <button on-tap="submit_login">Login</button>
         </div>
     </form>
     </div>
+
+
+  <iron-ajax
+    id="ajax"
+    verbose
+     url="https://uniworx.ifi.lmu.de/?action=uniworxLoginDo"
+     handle-as="document"
+     method="POST"
+     params=[[login_req_params]]
+     on-response="handleResponse"
+     last-response="{{response}}">
+
+</iron-ajax>
 
 
   </template>
@@ -104,19 +131,33 @@
 
       is: 'login-screen',
 
-      factoryImpl: function () {
-        console.log('test');
-      },
-
       properties: {
-        user : {
-          type: Object,
-          value: {
-            name: "",
-            password: ""
-          }
+        user_name : {
+          type: String,
+          value: ""
+        },
+        user_pw : {
+          type: String,
+          value: ""
+        },
+        login_req_params : {
+          type: String,
+          computed : 'build_params(user_name, user_pw)'
         },
         save_user: Boolean
+      },
+
+      build_params : function (name, pw) {
+        var json = {
+          username: name,
+          password: pw
+        };
+        return JSON.stringify(json);
+      },
+
+      handleResponse : function (data) {
+        doc = data.detail.response;
+        console.log(doc);
       },
 
       save_submit_login: function (e) {
@@ -126,7 +167,7 @@
 
       submit_login: function (e) {
         e.preventDefault();
-        // TODO
+        this.$.ajax.generateRequest();
       }
 
     });
