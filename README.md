@@ -1,3 +1,5 @@
+![uniworx login screen](http://imgur.com/a/mARyV)
+
 # Polymer App Toolbox - Drawer Template
 
 This template is a starting point for building apps using a drawer-based
